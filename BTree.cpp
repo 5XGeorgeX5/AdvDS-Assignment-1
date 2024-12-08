@@ -72,6 +72,10 @@ private:
         {
             newRightNode->data[i - midIndex - 1] = node->data[i];
             newRightNode->children[i - midIndex - 1] = node->children[i];
+            if (newRightNode->children[i - midIndex - 1] != nullptr)
+            {
+                newRightNode->children[i - midIndex - 1]->parent = newRightNode;
+            }
         }
         newRightNode->children[N - midIndex - 1] = node->children[N];
         newRightNode->size = N - midIndex - 1;
