@@ -38,27 +38,22 @@ private:
 
     Node *findNode(Node *node, const T &value)
     {
-        if (node == nullptr)
-            return nullptr;
         if (node->children[0] == nullptr)
             return node;
 
         for (int i = 0; i < node->size; i++)
         {
             if (value < node->data[i])
-            {
                 return findNode(node->children[i], value);
-            }
         }
         return findNode(node->children[node->size], value);
     }
 
     void fixNode(Node *node)
     {
-        if (node == nullptr || node->size < N)
-        {
+        if (node->size < N)
             return;
-        }
+
         Node *parent = node->parent;
         if (parent == nullptr)
         {
@@ -72,12 +67,13 @@ private:
         {
             newRightNode->data[i - midIndex - 1] = node->data[i];
             newRightNode->children[i - midIndex - 1] = node->children[i];
-            if (newRightNode->children[i - midIndex - 1] != nullptr)
-            {
-                newRightNode->children[i - midIndex - 1]->parent = newRightNode;
-            }
+            if (node->children[i] != nullptr)
+                node->children[i]->parent = newRightNode;
         }
         newRightNode->children[N - midIndex - 1] = node->children[N];
+        if (node->children[N] != nullptr)
+            node->children[N]->parent = newRightNode;
+
         newRightNode->size = N - midIndex - 1;
         int parentIndex = parent->insert(node->data[midIndex]);
         parent->children[parentIndex] = node;
@@ -94,14 +90,12 @@ private:
         std::cout << std::string(indentation, ' ');
         std::cout << node->data[0];
         for (int i = 1; i < node->size; i++)
-        {
             std::cout << ',' << node->data[i];
-        }
+
         std::cout << '\n';
+
         for (int i = 0; i <= node->size; i++)
-        {
             print(node->children[i], indentation + 2);
-        }
     }
 
 public:
